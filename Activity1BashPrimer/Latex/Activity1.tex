@@ -1,0 +1,148 @@
+\documentclass[a4paper]{article}
+
+\usepackage[utf8]{inputenc} % Permite digitar acentuações diretamente
+\usepackage[T1]{fontenc}
+\usepackage{amsmath} % Permite diagramação matemática avançada
+
+\usepackage{tikz} % Para construir árvores e BDDs
+\usetikzlibrary{trees,positioning}
+
+\usepackage{listings}
+\usepackage{xcolor}
+
+\definecolor{light-gray}{gray}{0.95}
+
+\lstset{
+    literate={~} {$\sim$}{1}, % set tilde as a literal (no process)
+    showstringspaces=true,
+    backgroundcolor=\color{light-gray},
+    columns=fullflexible
+}
+
+
+
+
+% ------------------------------------------------------------------------------------
+% ------------------------------------------------------------------------------------
+
+\title{Activity 1 - Bash Primer}
+
+\author{Daniel Schoonwinkel -- E\&E Postgraduate Networking Course 2019}
+% \date{1 Feb 2019}
+
+\begin{document}
+\maketitle
+
+\section{Introduction}
+
+
+
+BASH (Bourne Again Shell) in some form or other installed in most Linux / Unix distributions. Manipulating files and variables using command line arguments and scripts is a valuable skill, looks great on your CV and potentially save you time and repetitive donkey work. BASH is especially useful in scenarios where you only have ssh remote access and no GUI interface (think servers, datacenters, remote IoT, etc.). 
+
+In this part of the networking course we will learn to use many frequently used commands and write a few basic shell scripts.  
+
+\section{Practical examples}
+In this section you will see examples of how command can be used. Run all of the commands on your own computer to get an idea of the output and what each command does.
+
+\subsection{Basic commands}
+
+To get a list of files in a directory, get a Terminal (default Ctrl+Alt+T on Ubuntu), type
+
+\begin{lstlisting}
+ls
+\end{lstlisting}
+and Enter. What do you see?
+
+To get information about how to use a command, type the command and --help (or -h for some commands), like so: 
+
+\begin{lstlisting}
+ls --help
+\end{lstlisting}
+This gives usage instructions and other commandline arguments that can be used after the command. For example: 
+
+\begin{lstlisting}
+ls -a -l
+\end{lstlisting}
+The above command can also be written as:
+\begin{lstlisting}
+ls -al
+\end{lstlisting}
+
+To get even more information about how a specific command works type: 
+\begin{lstlisting}
+man ls
+\end{lstlisting}
+This brings up the manual of given command. Use arrow keys to scroll up and down. Type q to quit.
+
+Try all of these command on your own:
+\begin{lstlisting}
+ls, find, uname -a, ps -e, df, ifconfig, history
+\end{lstlisting}
+
+\subsubsection{File structure}
+In the Unix file structure, all entries are treated as files (including folders). This could sound strange, but it actually simplifies handing folders and files, because they are treated the same. Furthermore, useful system runtime values can also be stored as files (more on that later). 
+
+Navigating the file system is achieved with the change directory (cd) command. Run the command: 
+
+\begin{lstlisting}
+cd ~/
+\end{lstlisting}
+This will change the directory to the current user's home directory. The $\sim$ symbol represents the home directory. 
+
+Run the following command: 
+\begin{lstlisting}
+pwd
+\end{lstlisting}
+What do you see? The output is the \textbf{absolute path} to the current user's home directory. You can do a \texttt{ls} to get the contents of the directory. 
+
+Each \texttt{/} represents another folder away from the root of the directory structure. Doing this:
+\begin{lstlisting}
+cd /
+\end{lstlisting}
+will take you to the root (somewhat similar to the C:\\ directory of Windows.) Doing a \texttt{pwd} will also confirm that you are in the highest directory. All \textbf{absolute paths} are calculated from here.
+
+Doing a 
+\begin{lstlisting}
+cd /home/yourusername
+\end{lstlisting}
+will use the \textbf{absolute path} to get to your home directory.
+
+
+Because absolute paths can become quite cumbersome, we more frequently use relative paths, for example (go back to root (\texttt{/} directory first)
+\begin{lstlisting}
+cd home/
+cd yourusername/
+pwd
+\end{lstlisting}
+Note how both \texttt{cd} commands do not have a \texttt{/} before them.
+More useful relative path symbols are the following:
+\begin{lstlisting}
+cd .
+cd ..
+\end{lstlisting}
+The first refers to the current directory and the second refers to the directory on up on the hierarchy. If you keep on repeating the second command, you will end up back at the root (\texttt{/}) directory. Do this now.
+
+\subsection{File and directory manipulation}
+Git is a version control tool originally created by Linus Torvalds. More details on how Git can be used later, for now, we are going to use it to get the Activity files from the GitHub.com repository. Navigate to your \texttt{$\sim$/Downloads} directory and clone the repository: 
+\begin{lstlisting}
+git clone https://github.com/dschoonwinkel/NetworkingPGCourse.git
+\end{lstlisting}
+
+% \newcommand{\mytilde}{$\sim$}
+% \begin{Verbatim}[commandchars=\\\{\}]
+% sig symm : (Board, [(Int, Int)]) \mytilde> Bool
+% \end{Verbatim}
+
+
+
+\subsection{References}
+
+List of sources:
+
+\begin{itemize}
+	
+    \item http://tldp.org/LDP/abs/html/writingscripts.html
+    
+\end{itemize}
+
+\end{document}
