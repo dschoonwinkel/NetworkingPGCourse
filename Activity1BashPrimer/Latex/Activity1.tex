@@ -72,7 +72,7 @@ To get even more information about how a specific command works type:
 \begin{lstlisting}
 man ls
 \end{lstlisting}
-This brings up the manual of given command. Use arrow keys to scroll up and down. Type q to quit.
+This brings up the manual of given command. Use arrow keys to scroll up and down. Type q to quit. 
 
 Try all of these command on your own:
 \begin{lstlisting}
@@ -125,15 +125,38 @@ The first refers to the current directory and the second refers to the directory
 \subsection{File and directory manipulation}
 Git is a version control tool originally created by Linus Torvalds. More details on how Git can be used later, for now, we are going to use it to get the Activity files from the GitHub.com repository. Navigate to your \texttt{$\sim$/Downloads} directory and clone the repository: 
 \begin{lstlisting}
-git clone https://github.com/dschoonwinkel/NetworkingPGCourse.git
+git clone https://github.com/dschoonwinkel/networkingpgcourse.git
 \end{lstlisting}
 
-% \newcommand{\mytilde}{$\sim$}
-% \begin{Verbatim}[commandchars=\\\{\}]
-% sig symm : (Board, [(Int, Int)]) \mytilde> Bool
-% \end{Verbatim}
+In this directory you will see 3 files and the Latex folder (in the Latex folder is the source documentation for this tutorial that you are reading). 
 
 
+The python\_populator.py file is a Python script that writes text to ``some\_text.txt''. You can run the python script with 
+\begin{lstlisting}
+python python_populator.py
+\end{lstlisting}
+This will start writing to ``some\_text.txt''. You can stop programs on Linux by pressing Ctrl + C. Now use 
+\begin{lstlisting}
+cat some_text.txt
+\end{lstlisting} 
+to display the contents of the text file. You can use \texttt{cat} on any type of text file (even Python scripts and C++ source files) to quickly show the contents of that file. 
+
+Now, open another Terminal window, and show them side by side. Start the python script in the one window, and run the \texttt{cat} command above repeatedly on the other. You should see that the contents of the text file is growing. You can confirm this by running \texttt{ls -l} repeatedly. 
+If you want to see the results of a program repeatedly, you can use this command: 
+\begin{lstlisting}
+watch -n0 cat some_text.txt
+\end{lstlisting} 
+\texttt{watch} calls a command repeatedly at an interval specified (\texttt {-n0}, i.e.\ as frequently as possible). This is very useful for checking the frequently changing status of something. I use it a lot with \texttt{ifconfig} for example. 
+
+Now stop your program with Ctrl+C. If you wanted to start your python script in the background, i.e.\ not active in your current terminal allowing you to continue using the terminal, you can accomplish that with the \texttt{\&} symbol:
+\begin{lstlisting}
+python python_populator.py &
+\end{lstlisting}
+
+It still seems as if the program is active in the terminal, but if you press Enter, you will see the terminal is ready to accept a command (shown by the \$ at the end of the line). One the script prints something out again, the \$ disappears, but can be seen again after you press Enter. 
+
+This is because of stdout, stderr, etc...
+kill, killall, ps -e | grep, fg, bg, stdout redirection etc.
 
 \subsection{References}
 
