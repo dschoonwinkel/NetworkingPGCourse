@@ -153,12 +153,143 @@ Now stop your program with Ctrl+C. If you wanted to start your python script in 
 python python_populator.py &
 \end{lstlisting}
 
-It still seems as if the program is active in the terminal, but if you press Enter, you will see the terminal is ready to accept a command (shown by the \$ at the end of the line). One the script prints something out again, the \$ disappears, but can be seen again after you press Enter. 
+It still seems as if the program is active in the terminal, but if you press Enter, you will see the terminal is ready to accept a command (shown by the \$ at the end of the line). Once the script prints something out again, the \$ disappears, but can be seen again after you press Enter. 
 
-This is because of stdout, stderr, etc...
-kill, killall, ps -e | grep, fg, bg, stdout redirection etc.
+If you press Ctrl+C to stop the program, it will not quit. Why is this? Because the program is running in the background (in a seperate process), so you no longer have direct control of it. 
 
-\subsection{References}
+So, how do we stop it? In the other Terminal window that you have open, type the following command: 
+\begin{lstlisting}
+ps -e | grep python
+\end{lstlisting}
+You have seen the \texttt{ps} command before, showing you the processes running on the machine. The \texttt{|} is the piping operator, more on that later. \texttt{grep} is a searching tool. Thus the command above can be read as ``Show the running processes, send the results to \texttt{grep} and search for all lines containing python''. This should show you a list of all programs running with python in their names. 
+
+In the list you will see a process ID column (PID). This is the process ID assigned by the operating system to this program. To stop this program, we need to call \texttt{kill} on it, for example: 
+\begin{lstlisting}
+kill 5335
+\end{lstlisting}
+if the PID was 5335. You should now see that the output has stopped from the first Terminal. If you press Enter on that Terminal it will display a message about the python program that has been terminated. 
+
+You could also kill all the running ``python'' processes with \texttt{killall python}. Be warned that this will stop all python processes that you have access to / started, so it could cause unexpected results. 
+
+Another way of getting access to the process again from the Terminal is to use the \texttt{fg} (foreground) command. Once you have direct control of the process, you can stop it with Ctrl+C. Try this now. 
+
+The output that you see on screen is called stdout. If you want to save that output to a file, you need to redirect it to a filename. For example: 
+\begin{lstlisting}
+python python_populator.py > output1.txt
+\end{lstlisting}
+
+You will now see that there is no output in the Terminal window, because it is being sent to a file. \texttt{output1.txt} is created and overwritten every time this command is run. To append the output to an existing file, use $>>$ instead of $>$. 
+
+Other useful commands for file / directory manipulation are
+\texttt{cp, mv, rm}, copy, move and remove respectively. \textbf{Beware that using rm will completely remove a file / folder, with no chance of recovery.}
+
+Copying / removing directories and their subdirectories requires the \texttt{-r} recursive flag, e.g.\ \texttt{cp -r , rm -r}.
+
+
+
+\subsection{Piping commands}
+
+Now that you have a good idea of how files work on Linux, let us get to more interesting commands: 
+
+The piping operator \texttt{|} sends the stdout of one program to the stdin of another program. 
+
+A couple of examples will help us illustrate how the piping operator can be used. In each case, run the first command seperately, then use the piping operator to see the final result. For best results, ensure that you have about 20 lines of text in some\_text.txt. 
+
+\begin{lstlisting}
+ls | grep text
+find . | grep text
+cat some_text.txt | grep 1
+cat some_text.txt | less		#This requires 'q' to quit.
+ls | head -n 2
+cat some_text.txt | tail
+\end{lstlisting}
+Try all of the commands above and any combination that you think could be interesting. Be aware that not all commands accept input from stdin, and some do not accept it in the way that you would expect. Always check the man pages to know how programs work. 
+\texttt{less} is a simple interactive text viewer. It displays the text, instead of dumping it to the Terminal. 
+\texttt{head} shows the top lines `n' of the input, can be used with files as well. 
+\texttt{tail} is the opposite of head, showing the last `n' lines of a file. Default is 10. 
+
+\subsection{Networking commands}
+In this section, we will be discussing basic networking commands, and using \texttt{ssh} to get access to a remote machine. 
+
+Firstly, ensure that you are connected to the RaspberryPi Wifi. Your IP should be in the 192.168.2.* range. You can check your IP on Linux by using the \texttt{ifconfig} command. 
+
+Firstly, we will do a \texttt{ping} to see if you can communicate to the Raspberry Pi. 
+\begin{lstlisting}
+ping 192.168.2.1
+\end{lstlisting}
+A \texttt{ping} sends out an Internet Control Message Protocol (ICMP) packet that requests the destination to reply with ICMP packet. If a ping is successful, it is very likely that we will be able to communicate with the target. Most computers, servers and routers are set up to reply to \texttt{ping}s, making it a very reliable tool for checking connectivity. If you are connected to a hotspot with Internet connection, you can
+\begin{lstlisting}
+ping www.google.co.za
+\end{lstlisting}
+to check connectivity to Google. You will see that the domain name (www.google.com) is resolved to an IP address. This is called domain name lookup and is provided by the Domain Name Service (DNS). More on this protoocol later in the course. 
+
+Now that you have pinged the Raspberry Pi, try logging in remotely using \texttt{ssh}:
+\begin{lstlisting}
+ssh guest@192.168.2.1
+\end{lstlisting}
+The password is raspberry.
+
+This should show another commandline, very similar to the one that you were using, but with a different username, for example, you would see 
+\begin{lstlisting}
+pi@craftberrypi41: ~ $
+\end{lstlisting}
+Most commands are universal between Linux distributions, so you would be able to perform the commands mentioned above on the Raspberry Pi commandline as well. 
+
+Now, lets use our access to the Raspberry Pi to play around with networking. 
+
+Start with the following command on the Raspberry Pi: 
+\begin{lstlisting}
+nc -l 9999
+\end{lstlisting}
+This is starts a \texttt{netcat} session listening on TCP port 9999. 
+
+Whatever is received on that TCP port will be printed to stdout. 
+
+
+Now on your PC, in another Terminal, ensure that you have a valid connection to the Raspberry Pi. Then, use this command to connect to the TCP port 9999 on the Raspberry Pi. 
+\begin{lstlisting}
+nc 192.168.2.1 9999
+\end{lstlisting}
+Type some text on your PC's commandline and press Enter, you should see it on the Raspberry Pi's terminal. 
+
+Note: \texttt{nc} accepts only one TCP connection, so to further experiment, you will need to stop both sides of the connection with Ctrl+C. 
+
+Now, we will be using \texttt{nc} to transfer a file. \texttt{nc} accepts input to its stdin, and can therefore be used with the \texttt{|} operator. For example: 
+\begin{lstlisting}
+cat some_text.txt | nc 192.168.2.1 9999
+\end{lstlisting}
+The contents of some\_text.txt should then be sent to the terminal on the Raspberry Pi. If you wanted to save this text, you could redirect the output of \texttt{nc} on the Raspberry Pi terminal to a file, e.g.\ :
+\begin{lstlisting}
+nc -l 9999 > received_text.txt
+\end{lstlisting}
+This can be used to transfer any type of file over a TCP connection. 
+
+Another way of transferring files over the network would be \texttt{scp}, a copy utility using the secure shell layer. Using \texttt{scp} is left as an exercise to the reader. For more advanced and efficient copying, also have a look at \texttt{rsync}.
+
+\subsection{Cmdline editing and scripting}
+Most Linux commandlines support ``word processor-like'' text editing directly from the commandline with (amongst others) \texttt{vi / vim and nano}. My personal preference is \texttt{nano}, but not all Linux distributions have \texttt{nano} built-in, with \texttt{vi} being the most common. Try editing some\_text.txt with both. 
+Note: to edit \texttt{vi / vim}, press i. To exit, press Escape, and type \texttt{:wq!} for (write, quit, yes-overwrite). To exit \texttt{nano}, you will need to press Ctrl+X and confirm writing changes with `y'. As you will see, \texttt{nano} is much easier to understand for a beginner, although true \texttt{vim} skills can put you in a higher social status of true commandline guru's.
+
+Now that you can edit from the commandline, we will have a look at writing BASH scripts. Scripts are essentially a list of commands performed after one another, and are great for simplifying routine or repetetive tasks. Scripts are not compiled and will simply run from start to finish, even if one of the commands in the script failed. Error checking should be done with ``if'' statements in the script to ensure that the correct result is obtained. 
+
+Run the example\_script.bash as follows:
+\begin{lstlisting}
+bash example_script.bash 1
+\end{lstlisting}
+
+If you look at the script, you should notice 3 things: 
+\begin{enumerate}
+\item The syntax of the \texttt{if} statement. 
+\item The \texttt{echo} command: similar to \texttt{print} command from python / \texttt{printf} from C. 
+\item The commandline argument used in the \texttt{if}: \$1. \$2 represents the second commandline argument etc. 
+\end{enumerate}
+
+For this weeks assigment, you will have write a bash script using amongst others an \texttt{if} statement. 
+
+
+Other useful commands : \texttt{du -sch \$(ls), sudo shutdown -h now, sudo reboot}
+
+\section{References}
 
 List of sources:
 
