@@ -1,0 +1,118 @@
+\documentclass[a4paper]{article}
+
+\usepackage[utf8]{inputenc} % Permite digitar acentuações diretamente
+\usepackage[T1]{fontenc}
+\usepackage{amsmath} % Permite diagramação matemática avançada
+
+\usepackage{tikz} % Para construir árvores e BDDs
+\usetikzlibrary{trees,positioning}
+
+\usepackage{listings}
+\usepackage{xcolor}
+\usepackage{verbatim}
+
+\definecolor{light-gray}{gray}{0.95}
+
+\lstset{
+    literate={~} {$\sim$}{1}, % set tilde as a literal (no process)
+    showstringspaces=true,
+    backgroundcolor=\color{light-gray},
+    columns=fullflexible
+}
+
+
+
+
+% ------------------------------------------------------------------------------------
+% ------------------------------------------------------------------------------------
+
+\title{Activity 2 - Basic Linux Networking}
+
+\author{Daniel Schoonwinkel -- E\&E Postgraduate Networking Course 2019}
+% \date{1 Feb 2019}
+
+\begin{document}
+\maketitle
+
+\section{Introduction}
+
+In this part of the networking course you will learn to install Linux programs, write, compile and execute very basic Python and C++ programs and use low-level networking sockets on Linux. 
+
+\section{Practical examples}
+In this section we will present a walkthrough of commands and programs that will allow you to use Linux network sockets. The information contained in this section will enable you to complete the assignment at the end of this activity. 
+
+\subsection{Installing programs in Linux}
+
+These are a couple of ways that you can install programs in Linux, and this section will discuss 3 ways: the XUbuntu package manager \emph{APT}, compiling from source and installing using the Python packet manager \emph{Pip}. 
+
+\subsubsection{\emph{Advanced Packaging Tool (APT)} }
+
+Most Linux distributions have a package manager. Package managers are tools that provide pre-compiled binary files (executable programs and software libraries) as packages for your specific version of the operating system (OS). The managers of the your flavour of Linux - in XUbuntu's case that is Canonical - may impose some constraint or quality control requirement on binary files that are included as packages in the official package repository. Developers can also maintain their own repository, but Canonical then provides little guarantee of the usability or security of the external repository.
+
+In XUbuntu, the package manager can be invoked from the commandline using \texttt{apt-} commands. For example, if you want to search for Wireshark packages, you would use the following command:
+
+\begin{lstlisting}
+apt-cache search wireshark
+\end{lstlisting}
+
+This will show all the packages that are related to Wireshark in some way. More details on Wireshark will be given later in this walkthrough. Note that there are both programs and libraries included in the list. Libraries are indicated with the `lib' prefix.
+
+To install a program using \emph{APT}, you would use the following command: 
+\begin{lstlisting}
+sudo apt-get install wireshark
+\end{lstlisting}
+
+Note that the command \texttt{sudo} is added before the install command: this is necessary because only the root user or users with root privileges are allowed to install packages. On Linux, the root user is similar to an Admininstrator on Windows. 
+
+You should now be able to run Wireshark from the commandline as follows:
+\begin{lstlisting}
+sudo wireshark
+\end{lstlisting}
+
+We will use Wireshark later, for close the program and continue with the walkthrough. 
+
+As you can see, using the package manager is very easy and no extra configuration is needed. The package manager is generally the preferred method of installing programs on Linux. 
+
+However, at times the program that you require is not available in the official XUbuntu repository. For example, \emph{Sublime Text 3} is not available in the official repository, but in a separate developer repository. 
+
+The instructions for using this repository is at https://www.sublimetext.com/docs/3/linux\_repositories.html . 
+
+Go ahead and install \emph{Sublime} now according to the \texttt{apt} instructions. 
+
+We suggest using \emph{Sublime} for text editing and programming as it is lightweight and performs syntax highlighting in various computer programming languages. Note: it is not a complete IDE, but compiling and running will be done from the commandline. 
+
+Finally, to remove a package, use:
+
+\begin{lstlisting}
+sudo apt-get remove wireshark
+\end{lstlisting}
+
+\subsubsection{\emph{Pip} - Python's package manager} 
+\emph{Pip} is the Python equivalent of \texttt{apt}, but only for Python modules. \emph{Pip} is cross-platform (as is Python), and can therefore be used on Windows and Mac OSX as well. 
+It works with the following commands (\emph{Pip} might need to be installed with \texttt{apt} before it is availabe for use): 
+
+\begin{lstlisting}
+pip3 list #lists the installed python packages
+pip3 search pypacker #shows all packages related to pypacker
+pip3 install pypacker #installs package
+pip3 uninstall pypacker #removes package
+\end{lstlisting}
+
+See [1] for more details on \texttt{pip3}.
+
+\subsubsection{Compiling and Installing from source}
+
+\section{Assigment 2: Write your own ping-request and ping-responder. }
+
+
+\section{References}
+
+List of sources:
+
+\begin{enumerate}
+
+    \item[[1]]{\verb|https://pip.pypa.io/en/stable/user_guide/|}
+    
+\end{enumerate}
+
+\end{document}

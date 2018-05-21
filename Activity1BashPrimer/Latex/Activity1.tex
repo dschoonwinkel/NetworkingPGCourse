@@ -76,7 +76,8 @@ This brings up the manual of given command. Use arrow keys to scroll up and down
 
 Try all of these command on your own:
 \begin{lstlisting}
-ls, find, uname -a, ps -e, df, ifconfig, history
+ls, find, uname -a, ps -e, df, ifconfig, history, du -sch $(ls, 
+	sudo shutdown -h now, sudo reboot
 \end{lstlisting}
 
 \subsubsection{File structure}
@@ -266,6 +267,9 @@ This can be used to transfer any type of file over a TCP connection.
 
 Another way of transferring files over the network would be \texttt{scp}, a copy utility using the secure shell layer. Using \texttt{scp} is left as an exercise to the reader. For more advanced and efficient copying, also have a look at \texttt{rsync}.
 
+\subsubsection{Running networking commands locally}
+If you do not have access to the Raspberry Pi, you can simulate all of the networking commands on a interface on your local PC. Use \texttt{ifconfig} to get the IP address of the first ethernet interface on your PC. You can now use that IP address instead of the Raspberry Pi address. Remember that both sides now need to be run on your PC. Using two Terminal windows can be useful for this. 
+
 \subsection{Cmdline editing and scripting}
 Most Linux commandlines support ``word processor-like'' text editing directly from the commandline with (amongst others) \texttt{vi / vim and nano}. My personal preference is \texttt{nano}, but not all Linux distributions have \texttt{nano} built-in, with \texttt{vi} being the most common. Try editing some\_text.txt with both. 
 Note: to edit \texttt{vi / vim}, press i. To exit, press Escape, and type \texttt{:wq!} for (write, quit, yes-overwrite). To exit \texttt{nano}, you will need to press Ctrl+X and confirm writing changes with `y'. As you will see, \texttt{nano} is much easier to understand for a beginner, although true \texttt{vim} skills can put you in a higher social status of true commandline guru's.
@@ -277,17 +281,38 @@ Run the example\_script.bash as follows:
 bash example_script.bash 1
 \end{lstlisting}
 
-If you look at the script, you should notice 3 things: 
+If you look at the script, you should notice 4 things: 
 \begin{enumerate}
 \item The syntax of the \texttt{if} statement. 
 \item The \texttt{echo} command: similar to \texttt{print} command from python / \texttt{printf} from C. 
 \item The commandline argument used in the \texttt{if}: \$1. \$2 represents the second commandline argument etc. 
+\item The syntax of the \texttt{for} loop. 
 \end{enumerate}
 
-For this weeks assigment, you will have write a bash script using amongst others an \texttt{if} statement. 
+For this weeks assigment, you will have write a bash script using amongst others an \texttt{if} statement and \texttt{for} loop. 
 
+\section{Assigment 1: Using BASH scripts to send, receive and manipulate files}
 
-Other useful commands : \texttt{du -sch \$(ls), sudo shutdown -h now, sudo reboot}
+This week's assigment require that you write a BASH script that performs the following tasks: 
+
+\begin{enumerate}
+\item Use a \texttt{for}-loop to create a text file from \texttt{cc\_example\_text.txt} that is roughly 40 MB in size. 
+
+\item{Transfer the large file using \texttt{nc} and \texttt{scp}. Time the transfer times using \texttt{time} command. Whatever comes after the \texttt{time} command will be timed, for example 
+\begin{lstlisting}
+time ls
+\end{lstlisting}
+The script should accept three commandline arguments: the IP address and port of where \texttt{nc} should connect to and the third argument is the username \texttt{scp} should use. You only need to write the sending side in the script that you submit, but it is suggested that you test the script on a interface on your PC. 
+}
+
+\item Check file correctness by calculating the differences with \texttt{diff}. Read man entries.
+
+\item Send only the first 10 lines of the cc\_example\_text.txt over \texttt{nc}. Hint use \texttt{head}. Repeat, but send only the last 10 lines. 
+\item Send only lines containing the word ``have''. 
+
+\item Finally, submit your work to a GitHub repository using \texttt{git} from the commandline. You should create your own public GitHub repository, and send the link to the lecturers of this course. 
+
+\end{enumerate} 
 
 \section{References}
 
