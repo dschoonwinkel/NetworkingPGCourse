@@ -75,11 +75,13 @@ As you can see, using the package manager is very easy and no extra configuratio
 
 However, at times the program that you require is not available in the official XUbuntu repository. For example, \emph{Sublime Text 3} is not available in the official repository, but in a separate developer repository. 
 
-The instructions for using this repository is at https://www.sublimetext.com/docs/3/linux\_repositories.html . 
+The instructions for using this repository is at 
+
+https://www.sublimetext.com/docs/3/linux\_repositories.html . 
 
 Go ahead and install \emph{Sublime} now according to the \texttt{apt} instructions. 
 
-We suggest using \emph{Sublime} for text editing and programming as it is lightweight and performs syntax highlighting in various computer programming languages. Note: it is not a complete IDE, but compiling and running will be done from the commandline. 
+We suggest using \emph{Sublime} for text editing and programming as it is lightweight and performs syntax highlighting in various computer programming languages. Note: it is not a complete IDE; compiling and running will be done from the commandline. 
 
 Finally, to remove a package, use:
 
@@ -101,6 +103,93 @@ pip3 uninstall pypacker #removes package
 See [1] for more details on \texttt{pip3}.
 
 \subsubsection{Compiling and Installing from source}
+If a program is not in an Xubuntu repository or you need to configure it in a special way, you will have to compile the binaries from the source code. We will install \emph{Libtins} (a C++ packet crafting library) to illustrate this. 
+The instructions can be found here: https://libtins.github.io/download/
+
+You will frequently see installation instructions similar to this format: 
+\begin{enumerate}
+\item \textbf{install dependencies} : install all the necessary dependencies through \emph{APT} or compile them from source. 
+\item \texttt{configure} : this is an automatic script that will detect which operating system you use and which utilities / dependencies are available. If a critical dependency is missing, it will stop the build progress and notify the user which dependency could not be found. If everything is in order and ready for the build process, it usually creates a Makefile or some configuration file that the \texttt{make} step cannot run without.  
+\item \texttt{make} : This is the compiling step, and will probably take the longest. Usually multiple source files and folders are included in the build step. If compilation of one of the source files fail, the build is usually stopped with an error. 
+\item \texttt{make install} : the final step in the build process, installing the library and binaries in a suitable place. Usually this is in /usr/local/lib and /usr/local/bin or similar. Depending on the write permissions of that folder, you will have to sometimes run \texttt{sudo make install}.
+\end{enumerate}
+
+Not all of these steps are always included and extra steps could also be included as with \texttt{cmake} in the \emph{Libtins} installation. 
+
+\subsection{Writing and running Python and C++ programs on Linux}
+Now that you can install programs on Linux and are comfortable with the commandline, let us discuss writing programs using \emph{Sublime Text} and the commandline. 
+
+\subsubsection{Python Hello World!}
+Python is high-level language that is easy to learn and understand. It emphasises code readability and therefore removes some of the typical punctuation and syntax of other more formal programming languages. See [2] for more information.
+
+Writing programs in Python is very very simple:
+
+\begin{lstlisting}
+# Run: 
+# python3 helloworld.py
+
+## Import other modules and programs here
+
+# The main function creates a logical starting point (for debugging etc.)
+def main():
+    print("Hello World!")
+
+
+#This function will only be called if it is run as a program, 
+# NOT when it is included as a library / module in other code
+if __name__ == '__main__':
+    main()
+\end{lstlisting}
+
+The program above is also included in the activity directory. Be aware that all Python programs can be included in other programs by using the \texttt{import} command. For example, test what happens when you run \texttt{helloworld\_import.py}
+All lines at global scope are run even if it is just imported. 
+
+Therefore the use of the ``If MAIN'' clause: it prevents the \texttt{main} function to be run if it is not used as a standalone program.
+
+Python is generally easier to get started with, and easier to debug. It is recommended as the language to prototype your ideas or for simple projects. It has lots of functionality and also be used for more complex projects if they are not too computationally expensive. 
+
+The main disadvantages of Python are its longer latency times in networking and in some cases slower than C++ computation. Python does support offloading heavy computations to C++ modules with very little extra performance penalties. 
+
+In terms of programming complexity, the following options can be considered, from easiest to most difficult: 
+\begin{itemize}
+\item Write all of your code in Python if performance is not an issue. Always try this option first and then decide if performance is indeed an issue. Use profiling modules like \texttt{profile}, \texttt{cProfile} and texttt{timeit} to measure which part of your code takes the longest. See https://docs.python.org/3/library/profile.html for more details on profilers. 
+\item Write the slowest parts of your code in Python compatible C++ code. Test if this solves your problem.
+\item If performance is a major issue, rewrite the program is C++. Even in this case the Python program can help: getting an idea of how the functions and variables are structured in Python will help with writing the C++ program.
+\end{itemize}
+
+\subsubsection{C++ Hello World!}
+C++ is a powerful general-purpose language. It is an extension of the C language, to include object-orientated features. Its latest standard is C++17, but we will be using C++11 standard in this course because it is already supported by most C++ compilers. See [3] for more details. 
+
+C++ can manipulate network packets on the raw Ethernet packet layer or higher (IP, UDP, TCP) layers using OS network sockets or use various C++ libraries such as \emph{Boost}[4] and \emph{Libtins}[5].  
+
+For now we will only write our first C++ program:
+
+\begin{lstlisting}
+//Compile with: g++ -o helloworld helloworld.cpp -std=c++11
+//Run with: ./helloworld
+
+//Library required for writing to stdout
+#include <iostream>
+
+int main(int argc, char *argv[])
+{
+	//Stdout stream, << streaming operator, and a newline character
+	std::cout << "Hello World!" << std::endl;
+
+	
+	/* Show that the program was successful. 
+	This value can be read from commandline */
+	return 123;
+}
+\end{lstlisting}
+
+This file is also in the activity directory. Note the instructions on how to compile and run the program at the top of the file. Run the given commands on the commandline and in the same directory as the helloworld.cpp file.
+
+Unlike the Python program, this program needs to be compiled before it can be run. This is where some of the efficiency of C++ lies: the compiler performs strict syntax checking to ensure that the instructions in the program is executed accurately. Depending on the compiler, the code might be optimised before it is compiled into binary code. These binaries are built for the computer's specific hardware configuration, so further efficiency can be unlocked. A program compiled on one architecture can usually not be run on a different computer. 
+
+\subsubsection{Compiling and GNU Make}
+
+
 
 \section{Assigment 2: Write your own ping-request and ping-responder. }
 
@@ -112,6 +201,10 @@ List of sources:
 \begin{enumerate}
 
     \item[[1]]{\verb|https://pip.pypa.io/en/stable/user_guide/|}
+    \item[[2]]{\verb|https://www.python.org/about/|}
+    \item[[3]]{\verb|http://www.cplusplus.com/info/description/|}
+    \item[[4]]{\verb|https://www.boost.org/|}
+    \item[[5]]{\verb|https://libtins.github.io/|}
     
 \end{enumerate}
 
